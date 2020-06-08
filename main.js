@@ -1,16 +1,13 @@
-let rooms=[],creeps=[]
-for (const x in Game.rooms) {
-	rooms.push(x)
+const farmer = require('./farmer');
+
+let spawns=[],roomOfSpawns={}
+for (const x in Game.spawns) {
+	spawns.push(x)
+	roomOfSpawns[Game.spawns[x].room.name]=x
 }
-for (const x in Game.creeps) {
-	creeps.push(x)
-}
+console.log(spawns)
 module.exports.loop = function () {
-	addFarmer()
-}
-function addFarmer() {
-	const nums=creeps.length
-	if (nums<rooms*3){
-		Game.spawns[rooms[0]].spawnCreep( [WORK, CARRY, MOVE], 'Harvester'+Game.time, {memory: {role: 'harvester'}} );
-	}
+	if (spawns.length==0) return
+	farmer.addFarmer(spawns,roomOfSpawns)
+	farmer.dealCreeps()
 }
